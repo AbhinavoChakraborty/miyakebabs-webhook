@@ -1,24 +1,19 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException
+from models import WebhookPayload
+from db import insert_data
 
 app = FastAPI()
 
-# Define expected payload structure
-class WebhookPayload(BaseModel):
-    order_id: str
-    outlet_id: int
-    customer_id: int
-    order_date: str
-    total_amount: float
-    payment_mode: str
-    status: str
-
-
 @app.get("/")
 def read_root():
-    return {"message": "Miya Kebabs Webhook is live 🚀"}
+    return {"message": "🚀 Miya Kebabs Webhook is live and working!"}
 
 @app.post("/webhook")
 async def receive_webhook(payload: WebhookPayload):
-    print("Received webhook payload:", payload.dict())  # Log the data
-    return {"message": "Webhook received successfully"}
+    try:
+        insert_data(payload)
+        return {"message": "✅ Webhook data received and inserted successfully"}
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail="Something went wrong while inserting data.")
