@@ -13,6 +13,11 @@ class WebhookPayload(BaseModel):
     payment_mode: str
     status: str
 
+
+@app.get("/")
+def read_root():
+    return {"message": "Miya Kebabs Webhook is live 🚀"}
+
 @app.post("/webhook")
 async def receive_webhook(payload: WebhookPayload):
     print("Received webhook payload:", payload.dict())  # Log the data
