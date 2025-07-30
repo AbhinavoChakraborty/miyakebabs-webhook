@@ -1,8 +1,13 @@
 import os
+from dotenv import load_dotenv
 import psycopg2
 from contextlib import contextmanager
 
-DB_URL =  os.getenv("DB_URL")
+
+load_dotenv()
+
+
+DB_URL =  os.getenv("DATABASE_URL")
 
 
 @contextmanager
