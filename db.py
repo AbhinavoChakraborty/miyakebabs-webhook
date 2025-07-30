@@ -4,10 +4,10 @@ import psycopg2
 from contextlib import contextmanager
 
 
-load_dotenv()
+# load_dotenv()
 
 
-DB_URL =  os.getenv("DATABASE_URL")
+DB_URL =  "postgresql://postgres:HsUVWoYItgsIBHbsytYivLCCnaEFwNjp@interchange.proxy.rlwy.net:56909/railway"
 
 
 @contextmanager
