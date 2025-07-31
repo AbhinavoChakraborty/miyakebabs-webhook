@@ -5,15 +5,15 @@ from db import insert_data
 app = FastAPI()
 
 @app.get("/")
-def read_root():
-    return {"message": "🚀 Miya Kebabs Webhook is live and working!"}
+def root():
+    return {"message": "🚀 Miya Kebabs Webhook is up!"}
 
 @app.post("/webhook")
 async def receive_webhook(payload: WebhookPayload):
     try:
         insert_data(payload)
-        return {"message": "✅ Webhook data received and inserted successfully"}
+        return {"message": "✅ Data received and inserted successfully!"}
     except Exception as e:
         import traceback
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail="Something went wrong while inserting data.")
+        raise HTTPException(status_code=500, detail=str(e))

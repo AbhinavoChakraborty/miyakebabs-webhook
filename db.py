@@ -1,13 +1,7 @@
-import os
 import psycopg2
 from contextlib import contextmanager
 
-
-# load_dotenv()
-
-
-DB_URL =  "postgresql://postgres:HsUVWoYItgsIBHbsytYivLCCnaEFwNjp@interchange.proxy.rlwy.net:56909/railway"
-
+DB_URL = "postgresql://postgres:HsUVWoYItgsIBHbsytYivLCCnaEFwNjp@interchange.proxy.rlwy.net:56909/railway"
 
 @contextmanager
 def get_connection():
@@ -24,9 +18,8 @@ def get_connection():
 def insert_data(payload):
     with get_connection() as conn:
         cur = conn.cursor()
-        
-        # Log and insert outlet
-        print("[DB] Inserting outlet...")
+
+        # Insert outlet
         cur.execute("""
             INSERT INTO outlets (outlet_id, outlet_name, location, contact_info)
             VALUES (%s, %s, %s, %s)
@@ -38,8 +31,7 @@ def insert_data(payload):
             payload.outlet.contact_info
         ))
 
-        # Log and insert customer
-        print("[DB] Inserting customer...")
+        # Insert customer
         cur.execute("""
             INSERT INTO customers (customer_id, name, phone_number, email, created_at)
             VALUES (%s, %s, %s, %s, %s)
@@ -52,8 +44,7 @@ def insert_data(payload):
             payload.customer.created_at
         ))
 
-        # Log and insert order
-        print("[DB] Inserting order...")
+        # Insert order
         cur.execute("""
             INSERT INTO orders (order_id, outlet_id, customer_id, order_date, total_amount, payment_mode, status)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
@@ -67,8 +58,7 @@ def insert_data(payload):
             payload.order.status
         ))
 
-        # Log and insert order items
-        print("[DB] Inserting order items...")
+        # Insert order items
         for item in payload.order.items:
             cur.execute("""
                 INSERT INTO order_items (item_id, order_id, item_name, quantity, price_per_unit, total_price)
@@ -82,5 +72,28 @@ def insert_data(payload):
                 item.total_price
             ))
 
-        print("[DB] ✅ All records inserted successfully.")
+        # Insert taxes
+        for tax in payload.order.taxes or []:
+            cur.execute("""
+                INSERT INTO taxes (order_id, tax_name, tax_rate, tax_amount)
+                VALUES (%s, %s, %s, %s)
+            """, (
+                payload.order.order_id,
+                tax.tax_name,
+                tax.tax_rate,
+                tax.tax_amount
+            ))
+
+        # Insert discounts
+        for disc in payload.order.discounts or []:
+            cur.execute("""
+                INSERT INTO discounts (order_id, discount_type, discount_value, discount_reason)
+                VALUES (%s, %s, %s, %s)
+            """, (
+                payload.order.order_id,
+                disc.discount_type,
+                disc.discount_value,
+                disc.discount_reason
+            ))
+
         cur.close()

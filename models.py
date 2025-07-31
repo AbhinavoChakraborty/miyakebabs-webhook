@@ -23,6 +23,16 @@ class OrderItem(BaseModel):
     price_per_unit: float
     total_price: float
 
+class Tax(BaseModel):
+    tax_name: str
+    tax_rate: float
+    tax_amount: float
+
+class Discount(BaseModel):
+    discount_type: str
+    discount_value: float
+    discount_reason: Optional[str] = None
+
 class Order(BaseModel):
     order_id: str
     outlet_id: int
@@ -32,6 +42,8 @@ class Order(BaseModel):
     payment_mode: str
     status: str
     items: List[OrderItem]
+    taxes: Optional[List[Tax]] = []
+    discounts: Optional[List[Discount]] = []
 
 class WebhookPayload(BaseModel):
     customer: Customer
