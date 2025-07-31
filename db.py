@@ -84,13 +84,13 @@ def insert_data(payload):
         # Insert taxes
         for tax in payload.order.taxes or []:
             cur.execute("""
-                INSERT INTO taxes (order_id, tax_name, tax_rate, tax_amount)
+                INSERT INTO taxes (order_id, title, rate, amount)
                 VALUES (%s, %s, %s, %s)
             """, (
                 payload.order.order_id,
-                tax.tax_name,
-                tax.tax_rate,
-                tax.tax_amount
+                tax.title,
+                tax.rate,
+                tax.amount
             ))
 
         # Insert discounts

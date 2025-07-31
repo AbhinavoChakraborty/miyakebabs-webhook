@@ -24,9 +24,9 @@ class OrderItem(BaseModel):
     total_price: float
 
 class Tax(BaseModel):
-    tax_name: str
-    tax_rate: float
-    tax_amount: float
+    title: str
+    rate: float
+    amount: float
 
 class Discount(BaseModel):
     discount_type: str
