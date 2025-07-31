@@ -41,9 +41,14 @@ class Order(BaseModel):
     total_amount: float
     payment_mode: str
     status: str
+    order_type: Optional[str] = None
+    payment_type: Optional[str] = None
+    created_on: Optional[datetime] = None
+    order_from: Optional[str] = None
     items: List[OrderItem]
     taxes: Optional[List[Tax]] = []
     discounts: Optional[List[Discount]] = []
+
 
 class WebhookPayload(BaseModel):
     customer: Customer

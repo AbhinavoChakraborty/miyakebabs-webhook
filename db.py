@@ -46,8 +46,11 @@ def insert_data(payload):
 
         # Insert order
         cur.execute("""
-            INSERT INTO orders (order_id, outlet_id, customer_id, order_date, total_amount, payment_mode, status)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO orders (
+                order_id, outlet_id, customer_id, order_date, total_amount,
+                payment_mode, status, order_type, payment_type, created_on, order_from
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """, (
             payload.order.order_id,
             payload.order.outlet_id,
@@ -55,8 +58,14 @@ def insert_data(payload):
             payload.order.order_date,
             payload.order.total_amount,
             payload.order.payment_mode,
-            payload.order.status
+            payload.order.status,
+            payload.order.order_type,
+            payload.order.payment_type,
+            payload.order.created_on,
+            payload.order.order_from
         ))
+
+        
 
         # Insert order items
         for item in payload.order.items:
