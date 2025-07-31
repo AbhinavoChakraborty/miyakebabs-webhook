@@ -29,9 +29,11 @@ class Tax(BaseModel):
     amount: float
 
 class Discount(BaseModel):
-    discount_type: str
-    discount_value: float
-    discount_reason: Optional[str] = None
+    title: str
+    type: str
+    rate: float
+    amount: float
+    # discount_reason: Optional[str] = None
 
 class Order(BaseModel):
     order_id: str

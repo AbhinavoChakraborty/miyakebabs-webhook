@@ -96,13 +96,14 @@ def insert_data(payload):
         # Insert discounts
         for disc in payload.order.discounts or []:
             cur.execute("""
-                INSERT INTO discounts (order_id, discount_type, discount_value, discount_reason)
+                INSERT INTO discounts (order_id, title, type, rate, amount)
                 VALUES (%s, %s, %s, %s)
             """, (
                 payload.order.order_id,
-                disc.discount_type,
-                disc.discount_value,
-                disc.discount_reason
+                disc.title,
+                disc.type,
+                disc.rate, 
+                disc.amount
             ))
 
         cur.close()
